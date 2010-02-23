@@ -85,7 +85,7 @@ out:
 	return err;
 }
 
-static struct security_operations dirlimit_elf_security_ops = {
+static struct security_operations oreore_security_ops = {
 	.bprm_check_security =		oreore_bprm_check_security
 };
 
@@ -130,11 +130,11 @@ static void oreore_remove_securityfs(void)
 static int oreore_register_security(void)
 {
 	/* register ourselves with the security framework */
-	if (register_security (&dirlimit_elf_security_ops)) {
+	if (register_security (&oreore_security_ops)) {
 		printk (KERN_INFO "Failure registering oreore module "
 			"with the kernel\n");
 		/* try registering with primary module */
-		if (mod_reg_security (MY_NAME, &dirlimit_elf_security_ops)) {
+		if (mod_reg_security (MY_NAME, &oreore_security_ops)) {
 			printk (KERN_INFO "Failure registering oreore "
 				" module with primary security module.\n");
 			return -EINVAL;
@@ -148,18 +148,18 @@ static void oreore_unregister_security(void)
 {
 	/* remove ourselves from the security framework */
 	if (secondary) {
-		if (mod_unreg_security (MY_NAME, &dirlimit_elf_security_ops))
+		if (mod_unreg_security (MY_NAME, &oreore_security_ops))
 			printk (KERN_INFO "Failure unregistering oreore "
 				" module with primary module.\n");
 	} else { 
-		if (unregister_security (&dirlimit_elf_security_ops)) {
+		if (unregister_security (&oreore_security_ops)) {
 			printk (KERN_INFO "Failure unregistering oreore "
 				"module with the kernel\n");
 		}
 	}
 }
 
-static int __init dirlimit_elf_init (void)
+static int __init oreore_init (void)
 {
 	int retval = 0;
 	
@@ -178,7 +178,7 @@ static int __init dirlimit_elf_init (void)
 	return retval;
 }
 
-static void __exit dirlimit_elf_exit (void)
+static void __exit oreore_exit (void)
 {
 	oreore_remove_securityfs();
 	oreore_unregister_security();
@@ -186,8 +186,8 @@ static void __exit dirlimit_elf_exit (void)
 	printk (KERN_INFO "oreore module removed\n");
 }
 
-security_initcall (dirlimit_elf_init);
-module_exit (dirlimit_elf_exit);
+security_initcall (oreore_init);
+module_exit (oreore_exit);
 
 MODULE_DESCRIPTION("Directory Limit ELF");
 MODULE_LICENSE("GPL");
